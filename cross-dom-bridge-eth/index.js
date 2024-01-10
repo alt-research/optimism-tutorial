@@ -19,13 +19,14 @@ require('dotenv').config()
 // const SystemConfigProxy = '0xe97753e009ABE78ceF0dcBbCD6d3C661DAeC5Db0';
 const l1Url = `https://eth-sepolia.g.alchemy.com/v2/cLUZG2mwyhiYH06iuK0GOh5fto6jS__t`
 const l2Url = `https://opstack-avail-testnet.alt.technology:9545`
+const l1ChainId = 11155111;
+const l2ChainId = 42069;
 const AddressManager = '0x5CdC715827cBA5142037B45246e3e4b7165e1149';
 const L1CrossDomainMessengerProxy = '0xca0810a976845BCB0e32e6aB3Cac8079be829f9F';
 const L1StandardBridgeProxy = '0x8bbaB07621e162CD339CDCD6AB2662480B676f19';
 const L2OutputOracleProxy = '0x623D810D50654f3145B74801C78A72e82667ca8b';
 const OptimismPortalProxy = '0xFa9AE12B1139431EADa21228576c4CbDe4010DD5';
 const privateKey = '';
-
 // Global variable because we need them almost everywhere
 let crossChainMessenger
 let addr    // Our address
@@ -46,11 +47,11 @@ const setup = async() => {
   const [l1Signer, l2Signer] = await getSigners()
   addr = l1Signer.address
   crossChainMessenger = new optimismSDK.CrossChainMessenger({
-      l1ChainId: 11155111,    // Goerli value, 1 for mainnet
-      l2ChainId: 42069,  // Goerli value, 10 for mainnet
+      l1ChainId,    // Goerli value, 1 for mainnet
+      l2ChainId,  // Goerli value, 10 for mainnet
       l1SignerOrProvider: l1Signer,
       l2SignerOrProvider: l2Signer,
-      contracts: optimismSDK.getAllOEContracts(42069, {
+      contracts: optimismSDK.getAllOEContracts(l2ChainId, {
         overrides: {
           l1: {
             StateCommitmentChain: '0x0000000000000000000000000000000000000000',
@@ -156,8 +157,3 @@ main().then(() => process.exit(0))
     console.error(error)
     process.exit(1)
   })
-
-
-
-
-
